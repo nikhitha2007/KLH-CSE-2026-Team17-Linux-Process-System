@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Process Management System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <header>
+        <p class="tag">OPERATING SYSTEMS PROJECT</p>
+        <h1>Linux Process Management System</h1>
+        <p>Process Creation · Execution · Synchronization · Termination</p>
+    </header>
+
+    <main>
+        <section class="cards">
+            <div class="card">
+                <h3>01</h3>
+                <p>Parent Process</p>
+            </div>
+            <div class="card">
+                <h3>03</h3>
+                <p>Child Processes</p>
+            </div>
+            <div class="card">
+                <h3>06</h3>
+                <p>Core System Calls</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Process Lifecycle</h2>
+            <div class="lifecycle">
+                <span>Creation</span>
+                <span>Execution</span>
+                <span>Monitoring</span>
+                <span>Termination</span>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Run Process Simulation</h2>
+            <p>Click below to execute the actual C program.</p>
+
+            <button id="runButton" onclick="runProcess()">
+                Run Process Demo
+            </button>
+
+            <p id="status">Status: Ready</p>
+        </section>
+
+        <section class="panel">
+            <h2>Execution Terminal</h2>
+            <pre id="output">Waiting for process execution...</pre>
+        </section>
+    </main>
+
+    <script>
+        async function runProcess() {
+            const button = document.getElementById("runButton");
+            const output = document.getElementById("output");
+            const status = document.getElementById("status");
+
+            button.disabled = true;
+            button.textContent = "Running...";
+            status.textContent = "Status: Processes executing...";
+            output.textContent = "Starting C program...";
+
+            try {
+                const response = await fetch("/run", {
+                    method: "POST"
+                });
+
+                const data = await response.json();
+
+                output.textContent =
+                    data.output +
+                    (data.error ? "\nERROR:\n" + data.error : "");
+
+                status.textContent = data.success
+                    ? "Status: Execution completed successfully"
+                    : "Status: Execution failed";
+
+            } catch (error) {
+                output.textContent = "Could not connect to the backend: " + error;
+                status.textContent = "Status: Connection error";
+            }
+
+            button.disabled = false;
+            button.textContent = "Run Process Demo";
+        }
+    </script>
+
+</body>
+</html>o
